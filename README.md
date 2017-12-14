@@ -17,7 +17,7 @@ git clone https://github.com/simonpf/inversion_theory
 
 In this exercise you will retrieve the *integrated ice column density* or *ice water path* (IWP) from passive microwave observations from the *Global Preciptiation Measurement* (GPM) *Microwave Imager*. Buehler et al. <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> argue that measuring the bulk mass of ice in the atmosphere constitutes an important gap in the current global climate observation system, which leads to large differences in the IWP estimates of climate models. Retrieving IWP from passive microwave sensors provides global coverage at a much higher frequency than can be achieved with active sensors. Compared to LIDAR observations, microwave observations also have the advantage of being able to penetrate through thick clouds.
 
-![img](./plots/gpm.png "The Global Precipitation Measurement Microwave Imager onboard the GPM core observatory.")
+![img](./doc/plots/gpm.png "The Global Precipitation Measurement Microwave Imager onboard the GPM core observatory.")
 
 
 # Methods
@@ -149,7 +149,7 @@ The simulation database for this exercise consists of 350000 pairs \((\mathbf{y}
 
     The file `data/tbs_gmi` contains the observerd calibrated brightness temperatures from the (extra-)tropical storm Saola as it tracked southeast of Japan 2017-10-27.
     
-    ![img](./plots/saola_overview.png)
+    ![img](./doc/plots/saola_overview.png)
     
     Use your retrieval to retrieve the IWP path from the brightness temperatures. You can use the function `plot_iwp` to plot your results onto the map and compare with the MODIS image.
 
