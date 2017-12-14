@@ -210,6 +210,9 @@ inverse theory. It can be retrieved from
      
      Write a function that retrieves the cumulative distribution function of the posterior.
      
+     Given the CDF of the posterior what is your "best estimate" for the retrieval? And how
+     does this compare to the expected value for the validation data set.
+     
 **** Apply your Retrieval
 
      The file ~data/tbs_gmi~ contains the observerd calibrated brightness temperatures
@@ -221,6 +224,9 @@ inverse theory. It can be retrieved from
      Use your retrieval to retrieve the IWP path from the brightness temperatures. You
      can use the function ~plot_iwp~ to plot your results onto the map and compare with
      the MODIS image.
+
+     Also plot the median and the $10\text{th}$ percentile as a lower bound for the
+     ice water path.
      
 ** Regression Techniques
    
