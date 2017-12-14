@@ -34,7 +34,7 @@ inverse theory. It can be retrieved from
   to LIDAR observations, microwave observations also have the advantage of being
   able to penetrate through thick clouds.
   
-  #+CAPTION: The Global Precipitation Measurement Microwave Imager onboard the GPM core observatory.
+  #+CAPTION: The Global Precipitation Measurement Microwave Imager onboard the GPM core observatory satellite.
   #+ATTR_LATEX: :width 0.6\linewidth
   #+ATTR_HTML: :width 400px
   [[./plots/gpm.png]]
@@ -46,7 +46,7 @@ inverse theory. It can be retrieved from
 * Methods
   
   The measurement of cloud properties from passive microwave observations
-  is based on the interaction of thermal microwave radiation with the
+  is based on the interaction of thermal microwave radiation with 
   clouds through scattering. While possible, modeling scattering in
   a radiative transfer model is computationally too costly to be performed
   /during/ the retrieval. In this exercise we are therefore considering
