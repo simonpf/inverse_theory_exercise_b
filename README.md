@@ -1,4 +1,4 @@
-This repository contains the second exercise for the PhD course in inverse theory. It can be retrieved from [<http:github.com/simonpf/inversion_theory/>].
+This repository contains the second exercise for the PhD course in inverse theory. It can be retrieved from [<http:github.com/simonpf/inverse_theory_exercise_b/>].
 
 ```bash
 git clone https://github.com/simonpf/inversion_theory

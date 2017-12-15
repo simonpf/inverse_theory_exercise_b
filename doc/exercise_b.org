@@ -1,13 +1,12 @@
-#+TITLE: Inversion Theory: Exercise B
+#+TITLE: Inverse Theory: Exercise B
 #+AUTHOR: Patrick Eriksson, Simon Pfreundschuh
 #+OPTIONS: toc:nil
 
 This repository contains the second exercise for the PhD course in
-inverse theory. It can be retrieved from 
-[http:github.com/simonpf/inversion_theory/].
+inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_theory/][~github.com/simonpf/inverse_theory_exercise_b~]]:
 
   #+BEGIN_SRC bash
-  git clone https://github.com/simonpf/inversion_theory
+  git clone https://github.com/simonpf/inverse_theory_exercise_b
   #+END_SRC
   
 
@@ -105,7 +104,7 @@ inverse theory. It can be retrieved from
 *** The Weighting Function
     
     Assuming that our forward model simulations $(\mathbf{y}_i, x_i)$ are exact up to
-    a zero-mean, Gaussian error with covariance matrix $\mathbf{S}_e$, weights are given
+    a zero-mean, Gaussian error with covariance matrix $\mathbf{S}_e$, the weights are given
     by
     
     \begin{align}
@@ -140,14 +139,71 @@ inverse theory. It can be retrieved from
     
     
 
-** Regression Methods
+** Machine Learning
+   
+   Given the database, the simplest way of setting up an IWP retrieval
+   is probably by learning the inverse method $x = R(\mathbf{y})$ from
+   the data. This can be done using machine learning methods. For regression,
+   machine learning methods are trained in a /supervised manner/, that is
+   by minimizing a given loss function over a training set.
+   
+   The training set in this case will be the simulation database
+   $\{(\mathbf{y}_i, x_i)\}_{i = 1}^n$. This nomenclature is a bit unfortunate
+   because in machine learning the input is usually denoted by $\mathbf{x}$ and
+   the output to learn by $y$.
+   
+   For regression the most commonly used loss function is the mean squared error loss.
+   Statistically, this may be seen as training a maximum likelihood estimator
+   of the mean of a conditional Gaussian distribution. While this perspective would
+   even allow us to treat the retrieval problem in a Bayesian way, we will not pursue
+   this statistical interpretation here.
+
+*** Neural Network 101
+
+    Neural networks are a general computing model that computes a vector of
+    outputs $\mathbf{y}$ from an input vector $\mathbf{x}_$ by
+    propagating the input activations through a sequence $i = 1, \ldots, n$ of layers with
+    associated learnable weight matrices $\mathbf{W}_i$  and bias vectors $\mathbf{b}_i$:
+    
+    \begin{align}
+        \mathbf{x}_0 &= \mathbf{x}\\
+        \mathbf{x}_i &= f_{i}
+        \left ( \mathbf{W}_{i} \mathbf{x}_{i - 1}+ \mathbf{b}_i \right ) \\
+        \mathbf{y} &= \mathbf{x}_{n}
+    \end{align}
+
+    where $f_i$ is the activation function of layer $i$. As mentioned above, neural
+    networks are trained by minimizing a given loss function over the training data.
+    
+    Neural networks are usually trained using a technique called
+    /backpropagation/ to compute the gradients of the training loss with respect
+    to the weights and biases of each layer and then updating those using a specific
+    training algorithm. For large datasets, stochastic (batch) gradient descent (SGD)
+    is usually a good start, which conecutively computes gradients on randomized
+    subsets of the training set and uses them to update the weights.
+
+    While this exercise is clearly not the right place for an introduction to neural
+    networks, modern machine learning packages usually only require you to provide
+    training data and choose the loss functions and training method, so this is hopefully
+    enough to get you started.
+    
+*** Other Machine Learning Methods
+    
+    Even though neural networks are a pretty hot topic right now, there are many other machine
+    learning methods that might perform just as good especially on regression tasks and
+    moderately sized data sets. Some examples that might be worth considering are
+
+    - Regression trees and forests
+    - Boosted regression trees and boosting in general
+    - Support vector machines
+    
 
 * Exercises
   
   The simulation database for this exercise consists of 350000 pairs $(\mathbf{y}_i, x_i)$
   of simulated brightness temperatures $\mathbf{y}_i$ and corresponding  ice water path
-  values $x_i$. The vector $\mathbf{y}$ contains the brightness temperatures of channels
-  $8, 9, 10, 11, 12, 13$ of the GMI radiometer. For this exercise we will assume that the
+  values $x_i$. Each observation vector $\mathbf{y}_i$ consists of the brightness temperatures of
+  channels $8, 9, 10, 11, 12, 13$ of the GMI radiometer. For this exercise we will assume that the
   only uncertainty in our simulation database is due to thermal noise in the receiver.
   
   | Channel | Center freq $[GHz]$ | Polarization | NEDT (K) |
@@ -157,7 +213,7 @@ inverse theory. It can be retrieved from
   |      10 | $166$               | V            |      0.7 |
   |      11 | $166$               | H            |     0.65 |
   |      12 | $183.31 \pm 3$      | V            |     0.56 |
-  |      13 | $183.31 \pm 7$      | H            |     0.47 |
+  |      13 | $183.31 \pm 7$      | V            |     0.47 |
 
 
   
@@ -192,7 +248,7 @@ inverse theory. It can be retrieved from
 
 **** Error Analysis
      
-     Compute and plot the /mean absolute precentege error/ (MAPE)
+     Compute and plot the /mean absolute precentage error/ (MAPE)
 
      \begin{align}
       MAPE = \frac{100\%}{n} \sum_{i = 1}^n \frac{|\hat{x}(\mathbf{y}_i) - x_i|}{x_i}
@@ -208,16 +264,30 @@ inverse theory. It can be retrieved from
 
 **** Retrieving the Posterior CDF
      
-     Write a function that retrieves the cumulative distribution function of the posterior.
+     Write a function ~bmci_cdf(y_database, x_database, s_o, y)~, that
+     retrieves the cumulative distribution function of the posterior for
+     a single observation ~y~.
+
+     The CDF for the 33010th (1-based indexing!) database entry should look
+     like this:
+
+     #+CAPTION: Posterior CDF for entry 33010 in the database.
+     #+ATTR_LATEX: :width 0.6\linewidth
+     #+ATTR_HTML: :width 400px
+     [[./plots/cdf_example.png]]
+
      
-     Given the CDF of the posterior what is your "best estimate" for the retrieval? And how
-     does this compare to the expected value for the validation data set.
+     Given the CDF of the posterior what would be your /best estimate/ if you
+     had to return a single IWP value as the retrieval? How does this
+     compare to the expected value for the validation data set?
      
 **** Apply your Retrieval
 
      The file ~data/tbs_gmi~ contains the observerd calibrated brightness temperatures
      from the (extra-)tropical storm Saola as it tracked southeast of Japan 2017-10-27.
      
+     #+CAPTION: The tropical storm Saola seen from Modis and GMI.
+     #+ATTR_LATEX: :float nil
      [[./plots/saola_overview.png]]
      
 
@@ -228,10 +298,11 @@ inverse theory. It can be retrieved from
      Also plot the median and the $10\text{th}$ percentile as a lower bound for the
      ice water path.
      
-** Regression Techniques
+
+** Machine Learning Methods
    
    In this part of the exercise you should use your
-   favorite regression method to build an alternative IWP
+   favorite machine learning regression method to build an alternative IWP
    retrieval. In case you are unsure what to pick, two
    method that should work relatively well more or less
    right away are /neural networks/ or /regression trees/.
