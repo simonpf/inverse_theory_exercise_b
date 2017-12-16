@@ -20,6 +20,8 @@ cd matlab
 ${WGT} ${SRVR}data/matlab/exercise_b.mat
 
 cd ..
+mkdir plots
+cd plots
 
 ${WGT} ${SRVR}data/plots/gmi_lats_0.npy
 ${WGT} ${SRVR}data/plots/gmi_lats_1.npy

@@ -5,9 +5,9 @@ from matplotlib.colors import LogNorm
 
 def plot_modis_image(ax = None):
 
-    lon_ll, lat_ll, lon_ur, lat_ur = np.load("data/region_latlon.npy")
+    lon_ll, lat_ll, lon_ur, lat_ur = np.load("data/plots/region_latlon.npy")
     print((lon_ll, lat_ll, lon_ur, lat_ur))
-    x_ll, y_ll, x_ur, y_ur         = np.load("data/region_xy.npy")
+    x_ll, y_ll, x_ur, y_ur         = np.load("data/plots/region_xy.npy")
     print((x_ll, y_ll, x_ur, y_ur))
     lon_0 = 0.5 * (lon_ll + lon_ur)
     lat_0 = 0.5 * (lat_ll + lat_ur)
@@ -25,8 +25,8 @@ def plot_modis_image(ax = None):
         ax = plt.gca()
 
     for i in range(2):
-        z   = np.load("data/modis_img_" + str(i) + ".npy")
-        ext = np.load("data/modis_img_" + str(i) + "_extent.npy")
+        z   = np.load("data/plots/modis_img_" + str(i) + ".npy")
+        ext = np.load("data/plots/modis_img_" + str(i) + "_extent.npy")
         img = ax.imshow(z, origin = "lower",
                         extent = ext.tolist())
     m.drawparallels(np.linspace(10, 40, 4))
@@ -38,8 +38,8 @@ def plot_modis_image(ax = None):
 
 def plot_gmi_swath(orbit = 0, channel = 0, ax = None, **kwargs):
 
-    lon_ll, lat_ll, lon_ur, lat_ur = np.load("data/region_latlon.npy")
-    x_ll, y_ll, x_ur, y_ur         = np.load("data/region_xy.npy")
+    lon_ll, lat_ll, lon_ur, lat_ur = np.load("data/plots/region_latlon.npy")
+    x_ll, y_ll, x_ur, y_ur         = np.load("data/plots/region_xy.npy")
     lon_0 = 0.5 * (lon_ll + lon_ur)
     lat_0 = 0.5 * (lat_ll + lat_ur)
     m = Basemap(projection = 'ortho',
@@ -55,9 +55,9 @@ def plot_gmi_swath(orbit = 0, channel = 0, ax = None, **kwargs):
     if ax is None:
         ax = plt.gca()
 
-    lons = np.load("data/gmi_lons_" + str(orbit) + ".npy")
-    lats = np.load("data/gmi_lats_" + str(orbit) + ".npy")
-    data = np.load("data/gmi_tbs_" + str(orbit) + ".npy")
+    lons = np.load("data/plots/gmi_lons_" + str(orbit) + ".npy")
+    lats = np.load("data/plots/gmi_lats_" + str(orbit) + ".npy")
+    data = np.load("data/python/gmi_tbs_" + str(orbit) + ".npy")
 
     x, y = m(lons, lats)
 
@@ -76,8 +76,8 @@ def plot_iwp(iwp, iwp_min = 1e-6):
     f, axs = plt.subplots(1, 2, figsize = (10, 6))
     plot_modis_image(ax = axs[0])
 
-    lon_ll, lat_ll, lon_ur, lat_ur = np.load("data/region_latlon.npy")
-    x_ll, y_ll, x_ur, y_ur         = np.load("data/region_xy.npy")
+    lon_ll, lat_ll, lon_ur, lat_ur = np.load("data/plots/region_latlon.npy")
+    x_ll, y_ll, x_ur, y_ur         = np.load("data/plots/region_xy.npy")
     lon_0 = 0.5 * (lon_ll + lon_ur)
     lat_0 = 0.5 * (lat_ll + lat_ur)
     m = Basemap(projection = 'ortho',
