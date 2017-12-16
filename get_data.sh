@@ -37,5 +37,6 @@ ${WGT} ${SRVR}data/plots/modis_img_1_lons.npy
 ${WGT} ${SRVR}data/plots/modis_img_1_extent.npy
 ${WGT} ${SRVR}data/plots/region_latlon.npy
 ${WGT} ${SRVR}data/plots/region_xy.npy
+${WGT} ${SRVR}data/plots/plots.mat
 
 cd ../..
