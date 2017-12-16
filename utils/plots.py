@@ -90,8 +90,8 @@ def plot_iwp(iwp, iwp_min = 1e-6):
                 resolution = "l",
                 ax = axs[1])
 
-    lons = np.load("data/gmi_lons_0.npy")
-    lats = np.load("data/gmi_lats_0.npy")
+    lons = np.load("data/plots/gmi_lons_0.npy")
+    lats = np.load("data/plots/gmi_lats_0.npy")
     n_lons = lons.shape[1]
     n_lats = lons.shape[0]
 

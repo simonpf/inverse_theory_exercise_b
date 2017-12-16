@@ -27,7 +27,13 @@ ${WGT} ${SRVR}data/plots/gmi_lats_0.npy
 ${WGT} ${SRVR}data/plots/gmi_lats_1.npy
 ${WGT} ${SRVR}data/plots/gmi_lons_0.npy
 ${WGT} ${SRVR}data/plots/gmi_lons_1.npy
+${WGT} ${SRVR}data/plots/modis_img_0.npy
+${WGT} ${SRVR}data/plots/modis_img_0_lats.npy
+${WGT} ${SRVR}data/plots/modis_img_0_lons.npy
 ${WGT} ${SRVR}data/plots/modis_img_0_extent.npy
+${WGT} ${SRVR}data/plots/modis_img_1.npy
+${WGT} ${SRVR}data/plots/modis_img_1_lats.npy
+${WGT} ${SRVR}data/plots/modis_img_1_lons.npy
 ${WGT} ${SRVR}data/plots/modis_img_1_extent.npy
 ${WGT} ${SRVR}data/plots/region_latlon.npy
 ${WGT} ${SRVR}data/plots/region_xy.npy
