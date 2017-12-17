@@ -4,7 +4,10 @@ from mpl_toolkits.basemap import Basemap
 from matplotlib.colors import LogNorm
 
 def plot_modis_image(ax = None):
-
+    """
+    Plots the MODIS images of the tropical storm Saola into the provided axes
+    object or into the currently active axis if not provided.
+    """
     lon_ll, lat_ll, lon_ur, lat_ur = np.load("data/plots/region_latlon.npy")
     print((lon_ll, lat_ll, lon_ur, lat_ur))
     x_ll, y_ll, x_ur, y_ur         = np.load("data/plots/region_xy.npy")
@@ -36,8 +39,27 @@ def plot_modis_image(ax = None):
     ax.set_xlim([x_ll, x_ur])
     ax.set_ylim([y_ll, y_ur])
 
-def plot_gmi_swath(orbit = 0, channel = 0, ax = None, **kwargs):
 
+def plot_gmi_swath(data, orbit_index = 0, ax = None, **kwargs):
+    """
+    This plots the swaths of one of the two GMI orbits that saw the
+    storm Saola.
+
+    Additional keyword arguments are passed to the :code:`pcolormesh`
+    function.
+
+    Args:
+
+        data(numpy.array): Numpy array with the same shape as the swath,
+            i.e. the GMI brightness temperatures, containing the data
+            to plot.
+
+        orbit_index: Which of the orbits to plot 0 or 1.
+
+        ax(matplotlib.Axes): Matplotlib axes object to plot the data into.
+            If not given, the currently active axis will be used.
+
+    """
     lon_ll, lat_ll, lon_ur, lat_ur = np.load("data/plots/region_latlon.npy")
     x_ll, y_ll, x_ur, y_ur         = np.load("data/plots/region_xy.npy")
     lon_0 = 0.5 * (lon_ll + lon_ur)
@@ -55,13 +77,12 @@ def plot_gmi_swath(orbit = 0, channel = 0, ax = None, **kwargs):
     if ax is None:
         ax = plt.gca()
 
-    lons = np.load("data/plots/gmi_lons_" + str(orbit) + ".npy")
-    lats = np.load("data/plots/gmi_lats_" + str(orbit) + ".npy")
-    data = np.load("data/python/gmi_tbs_" + str(orbit) + ".npy")
+    lons = np.load("data/plots/gmi_lons_" + str(orbit_index) + ".npy")
+    lats = np.load("data/plots/gmi_lats_" + str(orbit_index) + ".npy")
 
     x, y = m(lons, lats)
 
-    img = ax.pcolormesh(x, y, data[:, :, channel], **kwargs)
+    img = ax.pcolormesh(x, y, data, **kwargs)
     m.drawparallels(np.linspace(10, 40, 4))
     m.drawmeridians(np.linspace(120, 150, 4))
     m.drawcoastlines()

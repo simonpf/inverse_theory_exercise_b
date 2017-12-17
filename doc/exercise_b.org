@@ -3,28 +3,43 @@
 #+OPTIONS: toc:nil
 
 This repository contains the second exercise for the PhD course in
-inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_theory/][~github.com/simonpf/inverse_theory_exercise_b~]]:
+inverse theory. It can be retrieved from 
+[[http://github.com/simonpf/inverse_theory_exercise_b/][~github.com/simonpf/inverse_theory_exercise_b/~]] or from the command line:
 
   #+BEGIN_SRC bash
   git clone https://github.com/simonpf/inverse_theory_exercise_b
   #+END_SRC
   
+After cloning the repository (or downloading it) run the ~get_data.sh~ script
+to download the data for this exercise. This will create and populate the ~data~
+subdirectory in the exercise folder.
+  
+  #+BEGIN_SRC bash
+  chmod +x ./get_data.sh
+  ./get_data.sh
+  #+END_SRC
 
 * Repository Structure
   - ~exercise_b.py~: The python exercise template. This should be a good
     starting point if you are planning to do the exercise in python.
-  - ~exercise_b.m~: The matlab exercise template. This should be a good
-    starting point if you are planning to do the exercise in Matlab.
-  - ~data/~: Subdirectory containing the data for building and
-    evaluating the retrieval.
-  - ~utils/~: Subdirectory containing additional python code, that is not
-    of interest for solving the exercise.
+  - ~exercise_b.m~: The MATLAB exercise template. This should be a good
+    starting point if you are planning to do the exercise in MATLAB.
+  - ~data/~: Subdirectory containing the data for the exercise.
+    - ~/data/python/~: Contains the all data required for this exercise
+      in the form of ~numpy~ arrays.
+    - ~/data/matlab/~: Contains the ~exercise_b.mat~ which holds all data
+      required for this exercise.
+    - ~/data/plots/~: Additional data required by the provided plotting
+      functions.
+  - ~utils/~: Subdirectory containing additional code mainly for plotting
+    of the results.
+
   
 * Background and Summary
   
   In this exercise you will retrieve the /integrated ice column density/ 
   or /ice water path/ (IWP) from passive microwave observations from the
-  /Global Preciptiation Measurement/ (GPM) /Microwave Imager/. Buehler
+  /Global Preciptiation Measurement/ (GPM) /Microwave Imager/. Eliasson
   et al. [fn:2] argue that measuring the bulk mass of ice in the atmosphere
   constitutes an important gap in the current global climate observation
   system, which leads to large differences in the IWP estimates of climate
@@ -40,7 +55,9 @@ inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_t
   
  
 
-[fn:1] Buehler, S. A., Östman, S., Melsheimer, C., Holl, G., Eliasson, S., John, V. O., Blumenstock, T., Hase, F., Elgered, G., Raffalski, U., Nasuno, T., Satoh, M., Milz, M., and Mendrok, J.: A multi-instrument comparison of integrated water vapour measurements at a high latitude site, Atmos. Chem. Phys., 12, 10925-10943, https://doi.org/10.5194/acp-12-10925-2012, 2012.
+[fn:1] Eliasson, S., S. A. Buehler, M. Milz, P. Eriksson and V. O. John
+Assessing observed and modelled spatial distributions of ice water path
+using satellite data
   
 * Methods
   
@@ -160,8 +177,8 @@ inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_t
 
 *** Neural Network 101
 
-    Neural networks are a general computing model that computes a vector of
-    outputs $\mathbf{y}$ from an input vector $\mathbf{x}_$ by
+    Neural networks are a general computing model that compute a vector of
+    output activations $\mathbf{y}$ from an input vector $\mathbf{x}_$ by
     propagating the input activations through a sequence $i = 1, \ldots, n$ of layers with
     associated learnable weight matrices $\mathbf{W}_i$  and bias vectors $\mathbf{b}_i$:
     
@@ -172,30 +189,36 @@ inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_t
         \mathbf{y} &= \mathbf{x}_{n}
     \end{align}
 
-    where $f_i$ is the activation function of layer $i$. As mentioned above, neural
-    networks are trained by minimizing a given loss function over the training data.
+    The $f_i$ s  here are the activation functions of each layer. Non-linear activation
+    functions allow the network to learn complex, non-linear mappings from the input
+    vector $\mathbf{x}$ to the output $\mathbf{y}$.
     
-    Neural networks are usually trained using a technique called
+    Neural networks are trained by finding the weight matrices $\mathbf{W}_1$,
+    \ldots \mathbf{W}_n$ and bias vectors $\mathbf{b}_1, \ldots, \mathbf{b}_n$
+    that minimize the mean of a given loss function
+    $\mathcal{L}(\hat{\mathbf{y}}, \mathbf{y})$ over a training set. All
+    commonly used training algorithms are based on a technique called
     /backpropagation/ to compute the gradients of the training loss with respect
-    to the weights and biases of each layer and then updating those using a specific
-    training algorithm. For large datasets, stochastic (batch) gradient descent (SGD)
-    is usually a good start, which conecutively computes gradients on randomized
-    subsets of the training set and uses them to update the weights.
+    to the weights and biases of each layers. These gradients are then used to
+    update the learnable parameters. For large datasets, stochastic (batch)
+    gradient descent (SGD) is usually a good algorithm to start with.
+    In each training step, SGD computes gradients on randomized subsets of the
+    training set and uses them to update the weights.
 
-    While this exercise is clearly not the right place for an introduction to neural
+    While this exercise is clearly not the right place for a complete introduction to neural
     networks, modern machine learning packages usually only require you to provide
-    training data and choose the loss functions and training method, so this is hopefully
+    training data and choose the loss function and training method, so this is hopefully
     enough to get you started.
     
 *** Other Machine Learning Methods
     
     Even though neural networks are a pretty hot topic right now, there are many other machine
     learning methods that might perform just as good especially on regression tasks and
-    moderately sized data sets. Some examples that might be worth considering are
+    moderately sized data sets. Some examples that might be worth considering are:
 
-    - Regression trees and forests
-    - Boosted regression trees and boosting in general
-    - Support vector machines
+    - regression trees and forests
+    - boosted regression trees and boosting in general
+    - support vector machines
     
 
 * Exercises
@@ -216,7 +239,22 @@ inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_t
   |      13 | $183.31 \pm 7$      | V            |     0.47 |
 
 
-  
+** Data
+
+   The data required to solve this exercise is provided both as ~numpy~ arrays and
+   MATLAB arrays.
+
+   - ~y_database~: $35000 \times 6$ array containing the simulated brightness temperatures
+     for the retrieval databse.
+   - ~iwp_database~: $35000 \times 1$ array containing the IWP values corresponding
+     to the simulated brightness temperatures in ~y_database~.
+   - ~y_validation~: Additional simulated brightness temperatures to test the retrieval.
+   - ~iwp_validation~: IWP values corresponding to the brightness temperatures in
+     ~y_validation~.
+   - ~gmi_tbs_0, gmi_tbs_1~: Data from two different GMI orbits containing observations
+     of the tropical storm Saola. The observations displayed below show orbit 0, but feel
+     free to use orbit 1 as well.
+
 ** BMCI
 
 **** The Database
@@ -235,9 +273,10 @@ inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_t
   where
   
   - ~y_database~: Matrix containing the simulated observations along its rows.
-  - ~x_database~: Vetor containing the corresponding IWP values
+  - ~x_database~: Vetor containing the corresponding IWP values (or any other quantity
+    you may want to retrieve).
   - ~s_o~: Matrix containing the covariance matrix $\mathbf{S}_o$ describing
-    the observation uncertainty
+    the observation uncertainty.
   - ~y~: The observations for which to retrieve the ice water path. Given either
     as a vector (for a single inversion) or as a matrix with the observations along
     its rows.
@@ -255,7 +294,7 @@ inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_t
      \end{align}
      
      as a function of $x_i > 0$ for the simulated measurements $\mathbf{y}_i, x_i$
-     contained in the validation data files ~y_val~ and ~x_val~.
+     contained in the arrays ~y_validation~ and ~iwp_validation~.
      
      Compute and plot also the mean of the  estimated standard deviation of the posterior
      distribution as a function of $x_i$.
@@ -268,10 +307,10 @@ inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_t
      retrieves the cumulative distribution function of the posterior for
      a single observation ~y~.
 
-     The CDF for the 33010th (1-based indexing!) database entry should look
+     The CDF for the 30000th (0-based indexing!) database entry should look
      like this:
 
-     #+CAPTION: Posterior CDF for entry 33010 in the database.
+     #+CAPTION: Posterior CDF for entry 30000 in the database.
      #+ATTR_LATEX: :width 0.6\linewidth
      #+ATTR_HTML: :width 400px
      [[./plots/cdf_example.png]]
@@ -291,31 +330,34 @@ inverse theory. It can be retrieved from [[http://github.com/simonpf/inversion_t
      [[./plots/saola_overview.png]]
      
 
-     Use your retrieval to retrieve the IWP path from the brightness temperatures. You
-     can use the function ~plot_iwp~ to plot your results onto the map and compare with
-     the MODIS image.
+     Use your retrieval to retrieve the IWP path from the brightness temperatures. The
+     functions ~plot_modis_image~ and ~plot_gmi_swath~ are provided to display the
+     MODIS RGB and your results on a map.
 
-     Also plot the median and the $10\text{th}$ percentile as a lower bound for the
-     ice water path.
+     In addition to the expected value, plot also the median and the 
+     $10\text{th}$ percentile as a lower bound for the ice water path.
      
-
 ** Machine Learning Methods
    
    In this part of the exercise you should use your
-   favorite machine learning regression method to build an alternative IWP
-   retrieval. In case you are unsure what to pick, two
-   method that should work relatively well more or less
-   right away are /neural networks/ or /regression trees/.
+   favorite machine learning regression method to build an
+   alternative IWP retrieval and compare it to the BMCI retrieval.
+
+   In case you are unsure what to pick, two method that should work relatively
+   well more or less right away are /neural networks/ or /regression trees/.
    
    If you're using python, you may have a look at the /scikit-learn/
    examples for [[http://scikit-learn.org/stable/auto_examples/ensemble/plot_adaboost_regression.html][(boosted) decision trees]] or [[http://scikit-learn.org/stable/modules/neural_networks_supervised.html][neural networks]].
    
-   For matlab examples can be found [[https://se.mathworks.com/help/nnet/examples/train-a-convolutional-neural-network-for-regression.html][for neural networks]] and [[https://se.mathworks.com/help/stats/regressiontree-class.html][regression trees]],
+   For MATLAB examples can be found [[https://se.mathworks.com/help/nnet/examples/train-a-convolutional-neural-network-for-regression.html][for neural networks]] and [[https://se.mathworks.com/help/stats/regressiontree-class.html][regression trees]],
    as well.
 
    
 
 **** Comparison to BMCI   
+     
+     Plot the MAPE of your machine learning retrieval and compar to the results obtained
+     using BMCI.
 
      
 
