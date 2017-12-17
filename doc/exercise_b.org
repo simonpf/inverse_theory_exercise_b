@@ -33,7 +33,7 @@ subdirectory in your exercise folder.
       functions.
   - ~utils/~: Subdirectory containing additional code mainly for plotting
     of the results.
-  - ~doc/~: This exercise description.
+  - ~doc/~: This exercise description and related content.
 
   
 * Background and Summary

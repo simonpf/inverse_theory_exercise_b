@@ -92,6 +92,52 @@ def plot_gmi_swath(data, orbit_index = 0, ax = None, **kwargs):
 
     return img
 
+def plot_on_map(lons, lats, data, ax = None, **kwargs):
+    """
+    Use pcolormesh to draw latitude-longitude data on map.
+    Keyword arguments are passed to pcolormesh.
+
+    Args:
+
+           lons(numpy.array): Numpy array containing the longitudes
+               of the mesh to plot.
+           lats(numpy.array): Numpy array containing the latitudes
+               of the mesh to plot.
+           data(numpy.array): Numpy array containing the data
+               to plot.
+           ax(matplotlib.Axes): Axes object to plot into. If not
+               given defaults to the currently active axis.
+
+    """
+    lon_ll, lat_ll, lon_ur, lat_ur = np.load("data/plots/region_latlon.npy")
+    x_ll, y_ll, x_ur, y_ur         = np.load("data/plots/region_xy.npy")
+    lon_0 = 0.5 * (lon_ll + lon_ur)
+    lat_0 = 0.5 * (lat_ll + lat_ur)
+    m = Basemap(projection = 'ortho',
+                lon_0 = lon_0,
+                lat_0 = lat_0,
+                llcrnrx = x_ll,
+                llcrnry = y_ll,
+                urcrnrx = x_ur,
+                urcrnry = y_ur,
+                resolution = "l",
+                ax = ax)
+
+    if ax is None:
+        ax = plt.gca()
+
+    x, y = m(lons, lats)
+
+    img = ax.pcolormesh(x, y, data, **kwargs)
+    m.drawparallels(np.linspace(10, 40, 4))
+    m.drawmeridians(np.linspace(120, 150, 4))
+    m.drawcoastlines()
+    m.fillcontinents(color='grey')
+    ax.set_xlim([x_ll, x_ur])
+    ax.set_ylim([y_ll, y_ur])
+
+    return m
+
 def plot_iwp(iwp, iwp_min = 1e-6):
 
     f, axs = plt.subplots(1, 2, figsize = (10, 6))
