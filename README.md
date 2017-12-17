@@ -6,7 +6,7 @@ inverse theory. It can be retrieved from
 
 After cloning the repository (or downloading it) run the `get_data.sh` script
 to download the data for this exercise. This will create and populate the `data`
-subdirectory in the exercise folder.
+subdirectory in your exercise folder.
 
     chmod +x ./get_data.sh
     ./get_data.sh
@@ -19,7 +19,7 @@ subdirectory in the exercise folder.
 -   `exercise_b.m`: The MATLAB exercise template. This should be a good
     starting point if you are planning to do the exercise in MATLAB.
 -   `data/`: Subdirectory containing the data for the exercise.
-    -   `/data/python/`: Contains the all data required for this exercise
+    -   `/data/python/`: Contains all data required for this exercise
         in the form of `numpy` arrays.
     -   `/data/matlab/`: Contains the `exercise_b.mat` which holds all data
         required for this exercise.
@@ -27,6 +27,7 @@ subdirectory in the exercise folder.
         functions.
 -   `utils/`: Subdirectory containing additional code mainly for plotting
     of the results.
+-   `doc/`: This exercise description.
 
 
 # Background and Summary
@@ -42,7 +43,7 @@ at a much higher frequency than can be achieved with active sensors. Compared
 to LIDAR observations, microwave observations also have the advantage of being
 able to penetrate through thick clouds.
 
-![img](./plots/gpm.png "The Global Precipitation Measurement Microwave Imager onboard the GPM core observatory satellite.")
+![img](./doc/plots/gpm.png "The Global Precipitation Measurement Microwave Imager onboard the GPM core observatory satellite.")
 
 
 # Methods
@@ -355,7 +356,7 @@ MATLAB arrays.
     The CDF for the 30000th (0-based indexing!) database entry should look
     like this:
     
-    ![img](./plots/cdf_example.png "Posterior CDF for entry 30000 in the database.")
+    ![img](./doc/plots/cdf_example.png "Posterior CDF for entry 30000 in the database.")
     
     Given the CDF of the posterior what would be your *best estimate* if you
     had to return a single IWP value as the retrieval? How does this
@@ -366,7 +367,7 @@ MATLAB arrays.
     The file `data/tbs_gmi` contains the observerd calibrated brightness temperatures
     from the (extra-)tropical storm Saola as it tracked southeast of Japan 2017-10-27.
     
-    ![img](./plots/saola_overview.png "The tropical storm Saola seen from Modis and GMI.")
+    ![img](./doc/plots/saola_overview.png "The tropical storm Saola seen from Modis and GMI.")
     
     Use your retrieval to retrieve the IWP path from the brightness temperatures. The
     functions `plot_modis_image` and `plot_gmi_swath` are provided to display the

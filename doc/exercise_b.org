@@ -12,7 +12,7 @@ inverse theory. It can be retrieved from
   
 After cloning the repository (or downloading it) run the ~get_data.sh~ script
 to download the data for this exercise. This will create and populate the ~data~
-subdirectory in the exercise folder.
+subdirectory in your exercise folder.
   
   #+BEGIN_SRC bash
   chmod +x ./get_data.sh
@@ -25,7 +25,7 @@ subdirectory in the exercise folder.
   - ~exercise_b.m~: The MATLAB exercise template. This should be a good
     starting point if you are planning to do the exercise in MATLAB.
   - ~data/~: Subdirectory containing the data for the exercise.
-    - ~/data/python/~: Contains the all data required for this exercise
+    - ~/data/python/~: Contains all data required for this exercise
       in the form of ~numpy~ arrays.
     - ~/data/matlab/~: Contains the ~exercise_b.mat~ which holds all data
       required for this exercise.
@@ -33,6 +33,7 @@ subdirectory in the exercise folder.
       functions.
   - ~utils/~: Subdirectory containing additional code mainly for plotting
     of the results.
+  - ~doc/~: This exercise description.
 
   
 * Background and Summary
