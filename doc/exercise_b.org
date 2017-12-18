@@ -93,21 +93,18 @@ using satellite data
    
     \begin{align}
      \int f(x') p(x' | \mathbf{y}) \: dx'
-    \end{align}
-    
+    \end{align}% 
     Using Bayes theorem, the integral can be computed as
    
     \begin{align}
      \int f(x') p(x' | \mathbf{y}) \: dx' &=
     \int f(x') \frac{p(\mathbf{y} | x')p(x')}{\int p(\mathbf{y} | x'') \: dx''} \: dx'
-    \end{align}
-    
+    \end{align}% 
    To simplify notation, we introduce the weighting function $w(\mathbf{y}, x)$ :
 
     \begin{align}
       w(\mathbf{y}, x) = \frac{p(\mathbf{y} | x')}{\int p(\mathbf{y} | x'') \: dx''}
-    \end{align}
-
+    \end{align}%
     Note that the second integral in (2) is just the expectation value 
     $\mathcal{E}_x\{f(x)w(\mathbf{y}, x)\}$ of the function $f$ weighted with
     the weighting function $w(\mathbf{y}, x)$ but with respect to the a priori distribution. 
@@ -119,7 +116,7 @@ using satellite data
 
     \begin{align}
      \int f(x') p(x' | \mathbf{y}) \: dx' \approx \sum_{i = 1}^n f(\mathbf{x}_i) w(\mathbf{y}, x_i)
-    \end{align}
+    \end{align}%
     
 *** The Weighting Function
     
@@ -132,7 +129,6 @@ using satellite data
       - \frac{(\mathbf{y} - \mathbf{y}_i)^T \mathbf{S}_e^{-1} (\mathbf{y} - \mathbf{y}_i)}
         {2} \right \}
     \end{align}
-    
     for some normalization factor $C$. The normalization factor is found to be 
     $C = \sum_{n = 1}^n w(\mathbf{y}, x_i)$ to ensure that
     $\mathcal{E}_{x|\mathbf{y}}\{1\} = 1$.
@@ -147,7 +143,6 @@ using satellite data
     \text{var}(x) = \mathcal{E}_{x | \mathbf{y}} \{ (x - \bar{x})^2 \} & \approx 
      \sum_{i = 1}^n w(\mathbf{y}, x_i) (x_i - \mathcal{E}_{x | \mathbf{y}}\{x\})^2
     \end{align}
-    
     But it is even possible to approximate the cumulative distribution function of the
     a posteriori distribution using:
 
@@ -156,7 +151,6 @@ using satellite data
                         &= \mathcal{E}_{x | \mathbf{y}} \{ \mathbf{I}_{x < x'} \} \\
                         &\approx \sum_{x_i < x'} w(\mathbf{y}, x_i)
     \end{align}
-    
     
 
 ** Machine Learning
@@ -191,7 +185,6 @@ using satellite data
         \left ( \mathbf{W}_{i} \mathbf{x}_{i - 1}+ \mathbf{\theta}_i \right ) \\
         \mathbf{y} &= \mathbf{x}_{n}
     \end{align}
-
     The $f_i$ s  here are the activation functions of each layer. Non-linear activation
     functions allow the network to learn complex, non-linear mappings from the input
     vector $\mathbf{x}$ to the output $\mathbf{y}$.
@@ -298,7 +291,6 @@ using satellite data
       MAPE &= \frac{100\%}{n} \sum_{i = 1}^n \frac{|\bar{x}(\mathbf{y}_i) - x_i|}{\bar{x}(\mathbf{y}_i)} \\ 
       MPE &= \frac{100\%}{n} \sum_{i = 1}^n \frac{\bar{x}(\mathbf{y}_i) - x_i}{\bar{x}(\mathbf{y}_i)}
      \end{align}
-     
      as a function of the retrieved mean of the posterior $\bar{x}(\mathbf{y}_i) > 0$ for the simulated measurements $\mathbf{y}_i, x_i$
      contained in the arrays ~y_validation~ and ~iwp_validation~.
      
