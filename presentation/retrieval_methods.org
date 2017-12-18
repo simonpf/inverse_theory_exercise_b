@@ -1,0 +1,427 @@
+#+TITLE: Other Retrieval Methods
+#+AUTHOR: Simon Pfreundschuh
+#+OPTIONS: toc:nil
+#+BEAMER_COLOR_THEME: dove
+#+BEAMER_THEME: default
+#+LATEX_HEADER: \usepackage[backend=biber, style=alphabetic, citestyle=authoryear]{biblatex}
+#+LATEX_HEADER: \usepackage{macros}
+#+LATEX_HEADER: \usepackage{siunitx}
+#+LATEX_HEADER: \addbibresource{literature.bib}
+
+* Overview
+
+  1. Background
+  2. Markov Chain Monte Carlo
+  3. Bayesian Monte Carlo Integration
+  4. Machine Learning
+    
+* Background
+  
+  - We still want to solve the retrieval problem:
+
+  \begin{align}
+  p(\vec{x} | \vec{y}) \propto p(\vec{y} | \vec{x}) p(\vec{x})
+  \end{align}
+  
+  - Rodgers tells use how to do that if
+    - $p(\vec{x})$ is Gaussian.
+    - We have a(n at most /moderately non-linear/) foward model $F$
+
+  - But practically $F$ should also
+    - provide Jacobians,
+    - not be too computationally complex.
+      
+* Background
+  
+** The Solutions
+   
+   - Markov Chain Monte Carlo:
+     - If you have a forward model and need the /full posterior distribution/.
+   - Database Retrievals:
+     - (Bayesian) Monte Carlo Integration (BMCI)
+     - Machine Learning
+     - If performance is critical or if you don't have a forward model.
+       
+* Markov Chain Monte Carlo
+
+** Advantages
+
+   - Direct sampling of the a posteriori distribution $p(\vec{x} | \vec{y})$
+   - No Jacobians required
+   - Not based on any assumptions
+
+** Disadvantages
+
+   - Very Slow
+     
+* Markov Chain Monte Carlo
+
+  - General method to sample from arbitrary distributions
+  - Sequential sampling: Next sample depends only on current state
+    - /Markov chain property/
+- Sample converge to target distribution 
+
+** Basic Idea
+   - Sample /propsal state/ from a proposal distribution (often a random walk).
+   - Accept or discard proposal depending on change in likelihood
+   - Repeat until convergence
+
+* Markov Chain Monte Carlo
+  Let $p(\vec{x} | \vec{y})$ be the posterior we want to sample from and
+  $J(\vec{x} | \vec{x}_i)$ a /symmetric proposal distribution/, i.e.
+  satisfying $J(\vec{x}_i | \vec{x}_j) = J(\vec{x}_j | \vec{x}_i)$.
+
+** Metropolis Algorithm
+   1. Draw a starting point $\vec{x}_0$ with $p(\mathbf{x}_0 | \mathbf{y}) > 0$
+   2. Iterate for $i = 1, \dots, n$:
+      1. Sample a proposal $\vec{x}^*$ from the proposal distribution
+         $J(\vec{x} | \vec{x}_{i - 1})$.
+      2. Calculate
+         \begin{align}
+         r = \frac{p(\vec{x}^* | \vec{y})}{p(\vec{x}_{i-1} | \vec{y})}
+         \end{align}
+      3. Set
+         \begin{align}
+         \vec{x}_i = \begin{cases}
+            \vec{x}^* & \text{with probability min}(r, 1) \\
+            \vec{x}_{i - 1} & \text{otherwise.}
+         \end{cases}
+         \end{align}
+
+
+* Markov Chain Monte Carlo
+** Why does it work?
+
+   A Markov chain is guaranteed to have a /unique stationary distribution/ if
+   - it is /aperiodic/,
+   - not /transient/,
+     - i.e. there is no state that is not recurrent,
+   - /irreducible/,
+     - i.e. there is no state for which there is a non-reachable state.
+       
+  Thus only need to show that the stationary distribution is the posterior
+  $p(\vec{x} | \vec{y})$.
+
+* Markov Chain Monte Carlo
+** Why does it work?
+   - Assume $p(\vec{x}_i | \vec{y}) = p(\vec{x} | \vec{y})$, i.e. the true posterior
+   - Then:
+      \begin{align}
+      p(\vec{x}_i, \vec{x}_{i + 1} | \vec{y}) &= p(\vec{x}_{i} | \vec{y}) J(\vec{x}_{i+1}, \vec{x}_i)
+      \text{min}(\frac{p(\vec{x}_{i+1} | \vec{y})}{p(\vec{x}_i | \vec{y})}, 1) \\
+      &= \underset{\vec{x}_i, \vec{x}_{i + 1}}{\text{argmax}}\{p(\vec{x} | \vec{y})\} J(\vec{x}_{i + 1}, \vec{x}_i)
+      \end{align}
+     - This is symmetric as well: $p(\vec{a}, \vec{b}) = p(\vec{b}, \vec{a})$
+
+   - Symmetry of the joint distribution implies equality of the marginal distributions:
+     \begin{align}
+     p(\vec{x}_{i + 1} | \vec{y}) = p(\vec{x}_i | \vec{y}) = p(\vec{x} | \vec{y})
+     \end{align}
+     
+* Markov Chain Monte Carlo
+** Things to Consider
+   - If the posterior probability of a proposed state is higher than that of 
+     the current state, the proposal is always accepted.
+     - The state will move towards high posterior densities.
+   - Algorithm needs time to reach stationary distribution: /warm-up/ phase
+   - Consecutive samples are not independent.
+
+     
+* Bayesian Monte Carlo Integration (BMCI)
+   
+ - MCMC is (conceptually) nice, but also inherently slow.
+ - BMCI uses a database of /precomputed simulations/ or
+   /observations/.
+
+** General Idea
+   - Use a database of pairs $(\vec{y}, \vec{x})$ of observations
+     and known $\vec{x}$
+   - Use importance sampling to transform samples in database to
+     samples of the posterior
+
+* Bayesian Monte Carlo Integration (BMCI)
+   
+   Consider the expected value $\mathcal{E}_{\vec{x} | \mathbf{y}}\{f(\vec{x}) \}$ of a function
+   $f$ computed with respect to the a posteriori distribution $p(\vec{x} | \mathbf{y})$:
+   
+    \begin{align}
+     \int f(\vec{x}') p(\vec{x}' | \mathbf{y}) \: d\vec{x}'
+    \end{align}
+    
+    Using Bayes theorem, the integral can be computed as
+   
+    \begin{align}
+     \int f(\vec{x}') p(\vec{x}' | \mathbf{y}) \: d\vec{x}' &=
+    \int f(\vec{x}') \frac{p(\mathbf{y} | \vec{x}')p(\vec{x}')}{\int p(\mathbf{y} | \vec{x}'') \: d\vec{x}''} \: d\vec{x}' \\
+    &= \int f(\vec{x}') w(\mathbf{y}, \vec{x}) p(\vec{x}') \: d\vec{x}' \\
+    &= \mathcal{E}_{\vec{x}}\{f(\vec{x})w(\vec{y}, \vec{x}) \}
+    \end{align}
+    
+
+* Bayesian Monte Carlo Integration (BMCI)
+   
+  If the database is distributed according to our a priori assumtions, we can thus
+  approximate any integral over the posterior distribution by:
+  
+    \begin{align}
+     \int f(\vec{x}') p(\vec{x}' | \mathbf{y}) \: d\vec{x}' \approx \sum_{i = 1}^n f(\mathbf{\vec{x}}_i) w(\mathbf{y}, \vec{x}_i)
+    \end{align}
+    
+* Bayesian Monte Carlo Integration (BMCI)
+
+** The Weighting Function
+   
+   - Assuming the database is exact up to a zero-mean, Gaussian error with covariance matrix
+     $\mat{S}_e$ the weighting function $w(\vec{y}, \vec{x})$ is given by:
+
+    \begin{align}
+      w(\mathbf{y}, \vec{x}_i) = \frac{1}{C} \cdot \exp \left \{ 
+      - \frac{(\mathbf{y} - \mathbf{y}_i)^T \mathbf{S}_e^{-1} (\mathbf{y} - \mathbf{y}_i)}
+        {2} \right \}
+    \end{align}
+    
+    with normalization factor $C$
+
+    \begin{align}
+         C = \int w(\mathbf{y}, \vec{x}) d\vec{x} \approx \sum_{i = 1}^n w(\vec{y}, \vec{x}_i)
+    \end{align}
+
+* Bayesian Monte Carlo Integration (BMCI)
+
+** The Retrieval    
+    
+   - This can be used to retrieve the mean and variance of the posterior distribution:
+    
+    \begin{align}
+     \bar{x} = \mathcal{E}_{x | \mathbf{y}} \{ x \} & \approx \sum_{i = 1}^n w(\mathbf{y}, x_i) x_i \\
+    \text{var}(x) = \mathcal{E}_{x | \mathbf{y}} \{ (x - \bar{x})^2 \} & \approx 
+     \sum_{i = 1}^n w(\mathbf{y}, x_i) (x_i - \mathcal{E}_{x | \mathbf{y}}\{x\})^2
+    \end{align}
+    
+  -  Or even the CDF of the posterior:
+    \begin{align}
+      F_{\vec{x} | \mathbf{y}}(\vec{x}) &=  \int_{-\infty}^{\vec{x}} p(\vec{x}')  d\vec{x}' \\
+                             &\approx \sum_{\vec{x}_i < \vec{x}} w(\mathbf{y}, \vec{x}_i)
+    \end{align}
+
+
+* Bayesian Monte Carlo Integration (BMCI)
+
+** Things to Consider
+   - A very large database may be required to truthfully represent
+     the a priori and provide sufficient a posteriori statistics.
+     - Solution: Weighting/clustering of database samples
+   - Traversing the database can take quite some time.
+     - Solution: Sorting the database in a smart way
+
+* Bayesian Monte Carlo Integration (BMCI)
+** Example: Global Precipitation Measurement (GMP) Retrieval
+    
+   International satellite mission to provide next-generation observations of rain and
+   snow worldwide every three hours.
+
+     #+CAPTION: GPROF 2010 Retrieval Algorithm Flow (\cite{gprof}).
+     #+ATTR_LATEX: :width 0.6\linewidth
+     [[./imgs/gprof.png]]
+
+* Bayesian Monte Carlo Integration (BMCI)
+** Example: Global Precipitation Measurement (GMP) Retrieval
+   - Over Ocean:
+     - Uses simulated database generated from profiles observed by the TRMM precipitation
+       radar
+     - Input: TBs, total precipitable water (TPR) from OEM, sea surface temperature (SST) from NWP
+     - database with $65 \times 10^6$ entries stratified into SST/TPR bins of width
+       $\SI{1}{\kelvin}$ / $\SI{1}{\milli \meter}$.
+     - Clustering algorithm used on bins to improve retrieval speed
+
+* Bayesian Monte Carlo Integration (BMCI)
+** Example: Global Precipitation Measurement (GMP) Retrieval
+
+     #+CAPTION: Trends in oceanic precipitation (\cite{gprof}).
+     #+ATTR_LATEX: :width 0.6\linewidth
+     [[./imgs/gprof_trends.png]]
+
+* Bayesian Monte Carlo Integration (BMCI)
+** Example: Global Precipitation Measurement (GMP) Retrieval
+
+     #+CAPTION: Precip from GPROF  (\cite{gprof}).
+     #+ATTR_LATEX: :width 0.6\linewidth
+     [[./imgs/gprof_precip.png]]
+
+
+
+* Machine Learning
+** Idea
+
+   - Try to learn the inverse method $\vec{x} = R(\vec{y})$ directly from the data.
+   - Regression is an old problem: Plenty of methods to choose from
+     - Traditional regression analysis
+     - Machine Learning
+
+* Machine Learning
+** Neural Networks
+   
+   - Universal estimators that compute a vector of output activations $\vec{y} = f_{NN}(\vec{x})$ from
+     a vector of input activations $\vec{x}$: 
+    \begin{align}
+        \mathbf{x}_0 &= \mathbf{x}\\
+        \mathbf{x}_i &= f_{i}
+        \left ( \mathbf{W}_{i} \vec{x}_{i - 1}+ \vec{\theta}_i \right ) \\
+        \mathbf{y} &= \mathbf{x}_{n}
+    \end{align}
+   - Weight matrices $\mat{W}_i$ and bias vectors $\vec{\theta}_i$ are /learnable parameters/ of
+     the network.
+
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/nn_1.png]]
+   
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/nn_2.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/nn_3.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/nn_4.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/nn_5.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/nn_6.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/nn_7.png]]
+
+* Machine Learning
+** Neural Networks
+   
+*** (Not so) Recent Trends
+    - Deep networks
+    - End-to-end learning
+    - Very hot topic currently
+      
+*** Deep Learning 
+    - Complex models, large amounts of data
+    - Enabled through batch leaning (independence of dataset size)
+      and fast (parallel) CPUs (GPUs)
+   
+* Machine Learning
+** Neural Networks
+*** Training
+   - Supervised learning: Minimize mean of loss function $\mathcal{L}(\hat{\vec{y}}, \vec{y})$
+     over training set $\{\vec{x}_i, \vec{y}_i\}_{i = 1}^n$.
+      \begin{align}
+      \underset{\vec{W}_i, \vec{\theta}_i}{\text{minimize}} 
+      \frac{1}{n}\sum_{i = 1}^N \mathcal{L}(f_{NN}(\vec{x}_i, \vec{W}_i, \vec{\theta}_i), \vec{y}_i)
+      \end{align}
+   - Use gradient information for efficient training
+   - Perform training on randomized minibatches (subsets of the training set)
+   
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_0.png]]
+   
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_1.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_2.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_3.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_4.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_5.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_6.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_7.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_8.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_9.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_10.png]]
+
+* Machine Learning
+** Neural Networks
+   #+ATTR_LATEX: :width 1.1\linewidth
+   [[./imgs/backprop_11.png]]
+   
+* Machine Learning
+** Neural Networks
+*** Advantages
+    - Computational performance
+      - Optimized CPU/GPU codes readily available
+    - Flexibility
+*** Disadvantages
+    - Need hyperparameter tuning for optimal performance
+    - More-or-less black box models
+
+* Machine Learning
+** Neural Networks
+    NN Performance on Intel Xeon Processor E5-1680 v4
+*** Example
+       [[./imgs/perf_cpu.png]] 
+
+* Machine Learning
+** Neural Networks
+*** Example
+    NN Performance on NVIDIA Tesla K20
+       [[./imgs/perf_gpu_1.png]] 
+
+* Machine Learning
+** Neural Networks
+*** Example
+       [[./imgs/dnn_low_high.png]] 
+
+*** Disadvantagas
+
+
+* References
+\printbibliography
