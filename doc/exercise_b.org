@@ -308,7 +308,7 @@ using satellite data
      retrieves the cumulative distribution function of the posterior for
      a single observation ~y~.
 
-     The CDF for the 30000th (0-based indexing!) database entry should look
+     The CDF for the 14325th (0-based indexing!) database entry should look
      like this:
 
      #+CAPTION: Posterior CDF for entry 30000 in the database.
