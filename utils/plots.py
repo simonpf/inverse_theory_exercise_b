@@ -178,37 +178,60 @@ def plot_iwp(iwp, iwp_min = 1e-6):
 
     return img
 
+################################################################################
+# Other Functions
+################################################################################
+
 def mape(iwp_pred, iwp_test):
+    """
+    The mean absolute percentage errror.
+    """
     return 100.0 * np.abs(iwp_pred - iwp_test) / iwp_pred
 
-def plot_errors(iwp_pred, iwp_pred_std, iwp_test):
+def mpe(iwp_pred, iwp_test):
+    """
+    The mean percentage errror.
+    """
+    return 100.0 * (iwp_pred - iwp_test) / iwp_pred
 
+def plot_errors(iwp_pred, iwp_pred_std, iwp_test):
+    """
+    Plots MAPE, Std. Dev, and MPE of the given predictions.
+    """
     f, axs = plt.subplots(1, 2, figsize = (10, 6))
 
     bins = np.logspace(-5, 1, 11)
     mapes = np.zeros(bins.size - 1)
+    mpes  = np.zeros(bins.size - 1)
     stds  = np.zeros(bins.size - 1)
 
     for i in range(10):
         x_l = bins[i]
         x_r = bins[i + 1]
 
-        inds = (iwp_pred >= x_l) * (iwp_pred < x_r)
+        inds     = (iwp_pred >= x_l) * (iwp_pred < x_r)
         mapes[i] = np.mean(mape(iwp_pred[inds], iwp_test[inds]))
-        stds[i] = 100.0 * np.mean(iwp_pred_std[inds] / iwp_pred[inds])
+        mpes[i]  = np.mean(mpe(iwp_pred[inds], iwp_test[inds]))
+        stds[i]  = 100.0 * np.mean(iwp_pred_std[inds] / iwp_pred[inds])
 
     x = 0.5 * (bins[1:] + bins[:-1])
 
-    axs[0].plot(x, mapes)
+    axs[0].set_title("MAPE & Std. Dev.")
+    axs[0].plot(x, mapes, label = 'MAPE', lw = 2)
+    axs[0].plot(x, stds, label = 'Std. Dev.', lw = 2)
     axs[0].set_xlabel("IWP $[kg / m^2]$")
-    axs[0].set_ylabel("MAPE [%]")
+    axs[0].set_ylabel("Error [%]")
     axs[0].set_xscale("log")
     axs[0].set_yscale("log")
     axs[0].set_ylim([1e1, 1e5])
+    axs[0].legend()
 
-    axs[1].plot(x, stds)
+    axs[1].plot(x, mpes, lw = 2)
+    axs[1].set_title("MPE")
     axs[1].set_xlabel("IWP $[kg / m^2]$")
-    axs[1].set_ylabel("Retrieval Uncertainty [%]")
+    axs[1].set_ylabel("Error [%]")
     axs[1].set_xscale("log")
-    axs[1].set_yscale("log")
-    axs[1].set_ylim([1e1, 1e5])
+    axs[1].set_ylim([-1000.0, 1000.0])
+    axs[1].legend()
+
+    plt.tight_layout()

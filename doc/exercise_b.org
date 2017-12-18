@@ -288,17 +288,19 @@ using satellite data
 
 **** Error Analysis
      
-     Compute and plot the /mean absolute precentage error/ (MAPE)
+     Compute and plot the /mean absolute precentage error/ (MAPE) and the
+     /mean percentage error/ (MPE):
 
      \begin{align}
-      MAPE = \frac{100\%}{n} \sum_{i = 1}^n \frac{|\hat{x}(\mathbf{y}_i) - x_i|}{x_i}
+      MAPE &= \frac{100\%}{n} \sum_{i = 1}^n \frac{|\hat{x}(\mathbf{y}_i) - x_i|}{\hat{x}(\mathbf{y}_i)} \\ 
+      MPE &= \frac{100\%}{n} \sum_{i = 1}^n \frac{\hat{x}(\mathbf{y}_i) - x_i}{\hat{x}(\mathbf{y}_i)}
      \end{align}
      
-     as a function of $x_i > 0$ for the simulated measurements $\mathbf{y}_i, x_i$
+     as a function of $\hat{x}(\mathbf{y}_i) > 0$ for the simulated measurements $\mathbf{y}_i, x_i$
      contained in the arrays ~y_validation~ and ~iwp_validation~.
      
-     Compute and plot also the mean of the  estimated standard deviation of the posterior
-     distribution as a function of $x_i$.
+     Compute and plot also the mean of the relative error estimated from the standard 
+     deviation of the posterior as a function of $\hat{x}(\mathbf{y}_i)$.
      
      What does this tell you about the retrieval?
 
@@ -311,7 +313,7 @@ using satellite data
      The CDF for the 14325th (0-based indexing!) database entry should look
      like this:
 
-     #+CAPTION: Posterior CDF for entry 30000 in the database.
+     #+CAPTION: Posterior CDF for entry 14325 in the database.
      #+ATTR_LATEX: :width 0.6\linewidth
      #+ATTR_HTML: :width 400px
      [[./plots/cdf_example.png]]
@@ -357,7 +359,7 @@ using satellite data
 
 **** Comparison to BMCI   
      
-     Plot the MAPE of your machine learning retrieval and compar to the results obtained
+     Plot the MAPE of your machine learning retrieval and compare to the results obtained
      using BMCI.
 
      
