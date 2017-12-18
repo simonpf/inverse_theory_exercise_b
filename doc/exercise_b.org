@@ -325,17 +325,21 @@ using satellite data
      
 **** Apply your Retrieval
 
-     The file ~data/tbs_gmi~ contains the observerd calibrated brightness temperatures
-     from the (extra-)tropical storm Saola as it tracked southeast of Japan 2017-10-27.
+     The arrays ~gmi_tbs_0~ and ~gmi_tbs_1~ contain the observed calibrated brightness
+     temperatures from to GMI orbits that saw the (extra-)tropical storm Saola as it
+     tracked southeast of Japan 2017-10-27. The storm is better visible in ~gmi_tbs_0~
+     but the other data is provided here as well in case you want to try your retrieval
+     on this orbit as well.
      
-     #+CAPTION: The tropical storm Saola seen from Modis and GMI.
+     #+CAPTION: The tropical storm Saola seen from Modis and GMI (~gmi_tbs_0~).
      #+ATTR_LATEX: :float nil
      [[./plots/saola_overview.png]]
      
 
      Use your retrieval to retrieve the IWP path from the brightness temperatures. The
-     functions ~plot_modis_image~ and ~plot_gmi_swath~ are provided to display the
-     MODIS RGB and your results on a map.
+     functions ~plot_modis_image~ (~plot_modis~ in MATLAB) and ~plot_gmi_swath~ are
+     provided to display the MODIS RGB and your results on a map. Note that you need
+     to pass the orbit index to the plotting function.
 
      In addition to the expected value, plot also the median and the 
      $10\text{th}$ percentile as a lower bound for the ice water path.

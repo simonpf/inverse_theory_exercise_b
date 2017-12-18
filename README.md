@@ -27,7 +27,7 @@ subdirectory in your exercise folder.
         functions.
 -   `utils/`: Subdirectory containing additional code mainly for plotting
     of the results.
--   `doc/`: This exercise description.
+-   `doc/`: This exercise description and related content.
 
 
 # Background and Summary
@@ -333,17 +333,19 @@ MATLAB arrays.
 
 3.  Error Analysis
 
-    Compute and plot the *mean absolute precentage error* (MAPE)
+    Compute and plot the *mean absolute precentage error* (MAPE) and the
+    *mean percentage error* (MPE):
     
     \begin{align}
-     MAPE = \frac{100\%}{n} \sum_{i = 1}^n \frac{|\hat{x}(\mathbf{y}_i) - x_i|}{x_i}
+     MAPE &= \frac{100\%}{n} \sum_{i = 1}^n \frac{|\bar{x}(\mathbf{y}_i) - x_i|}{\bar{x}(\mathbf{y}_i)} \\ 
+     MPE &= \frac{100\%}{n} \sum_{i = 1}^n \frac{\bar{x}(\mathbf{y}_i) - x_i}{\bar{x}(\mathbf{y}_i)}
     \end{align}
     
-    as a function of \(x_i > 0\) for the simulated measurements \(\mathbf{y}_i, x_i\)
+    as a function of the retrieved mean of the posterior \(\bar{x}(\mathbf{y}_i) > 0\) for the simulated measurements \(\mathbf{y}_i, x_i\)
     contained in the arrays `y_validation` and `iwp_validation`.
     
-    Compute and plot also the mean of the  estimated standard deviation of the posterior
-    distribution as a function of \(x_i\).
+    Compute and plot also the mean of the relative error estimated from the standard 
+    deviation of the posterior as a function of \(\bar{x}(\mathbf{y}_i)\).
     
     What does this tell you about the retrieval?
 
@@ -353,10 +355,10 @@ MATLAB arrays.
     retrieves the cumulative distribution function of the posterior for
     a single observation `y`.
     
-    The CDF for the 30000th (0-based indexing!) database entry should look
+    The CDF for the 14325th (0-based indexing!) database entry should look
     like this:
     
-    ![img](./doc/plots/cdf_example.png "Posterior CDF for entry 30000 in the database.")
+    ![img](./doc/plots/cdf_example.png "Posterior CDF for entry 14325 in the database.")
     
     Given the CDF of the posterior what would be your *best estimate* if you
     had to return a single IWP value as the retrieval? How does this
@@ -364,14 +366,18 @@ MATLAB arrays.
 
 5.  Apply your Retrieval
 
-    The file `data/tbs_gmi` contains the observerd calibrated brightness temperatures
-    from the (extra-)tropical storm Saola as it tracked southeast of Japan 2017-10-27.
+    The arrays `gmi_tbs_0` and `gmi_tbs_1` contain the observed calibrated brightness
+    temperatures from to GMI orbits that saw the (extra-)tropical storm Saola as it
+    tracked southeast of Japan 2017-10-27. The storm is better visible in `gmi_tbs_0`
+    but the other data is provided here as well in case you want to try your retrieval
+    on this orbit as well.
     
-    ![img](./doc/plots/saola_overview.png "The tropical storm Saola seen from Modis and GMI.")
+    ![img](./doc/plots/saola_overview.png "The tropical storm Saola seen from Modis and GMI (`gmi_tbs_0`).")
     
     Use your retrieval to retrieve the IWP path from the brightness temperatures. The
-    functions `plot_modis_image` and `plot_gmi_swath` are provided to display the
-    MODIS RGB and your results on a map.
+    functions `plot_modis_image` (`plot_modis` in MATLAB) and `plot_gmi_swath` are
+    provided to display the MODIS RGB and your results on a map. Note that you need
+    to pass the orbit index to the plotting function.
     
     In addition to the expected value, plot also the median and the 
     \(10\text{th}\) percentile as a lower bound for the ice water path.
@@ -394,7 +400,7 @@ as well.
 
 1.  Comparison to BMCI
 
-    Plot the MAPE of your machine learning retrieval and compar to the results obtained
+    Plot the MAPE of your machine learning retrieval and compare to the results obtained
     using BMCI.
 
 
