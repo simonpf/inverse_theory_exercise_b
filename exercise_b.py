@@ -37,6 +37,12 @@ from matplotlib.colors import LogNorm
 # to avoid them from messing up the scale and also because
 # the IWP values span several orders of magnitude, it's
 # a good idea to use a custom log-norm for all plots.
+#
+# Also you need to pass the orbit index to the plotting
+# function depending on whether you ran your retrieval
+# on gmi_tbs_0 (orbit_index = 0) or gmi_tbs_1
+# (orbit_index = 1).
+#
 
 norm = LogNorm(vmin = 1e-3, vmax = 100.0)
 f, axs = plt.subplots(2, 2, figsize = (8, 8))
