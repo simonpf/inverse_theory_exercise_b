@@ -41,7 +41,7 @@ subdirectory in your exercise folder.
   In this exercise you will retrieve the /column integrated ice density/ 
   or /ice water path/ (IWP) from passive microwave observations from the
   /Global Preciptiation Measurement/ (GPM) /Microwave Imager/. Eliasson
-  et al. [fn:2] argue that measuring the bulk mass of ice in the atmosphere
+  et al. [fn:1] argue that measuring the bulk mass of ice in the atmosphere
   constitutes an important gap in the current global climate observation
   system, which leads to large differences in the IWP estimates of climate
   models. Retrieving IWP from passive microwave sensors provides global coverage
@@ -54,8 +54,6 @@ subdirectory in your exercise folder.
   #+ATTR_HTML: :width 400px
   [[./plots/gpm.png]]
   
- 
-
 [fn:1] Eliasson, S., S. A. Buehler, M. Milz, P. Eriksson and V. O. John
 Assessing observed and modelled spatial distributions of ice water path
 using satellite data
@@ -93,18 +91,18 @@ using satellite data
    
     \begin{align}
      \int f(x') p(x' | \mathbf{y}) \: dx'
-    \end{align}% 
+    \end{align} 
     Using Bayes theorem, the integral can be computed as
    
     \begin{align}
      \int f(x') p(x' | \mathbf{y}) \: dx' &=
     \int f(x') \frac{p(\mathbf{y} | x')p(x')}{\int p(\mathbf{y} | x'') \: dx''} \: dx'
-    \end{align}% 
+    \end{align} 
    To simplify notation, we introduce the weighting function $w(\mathbf{y}, x)$ :
 
     \begin{align}
       w(\mathbf{y}, x) = \frac{p(\mathbf{y} | x')}{\int p(\mathbf{y} | x'') \: dx''}
-    \end{align}%
+    \end{align}
     Note that the second integral in (2) is just the expectation value 
     $\mathcal{E}_x\{f(x)w(\mathbf{y}, x)\}$ of the function $f$ weighted with
     the weighting function $w(\mathbf{y}, x)$ but with respect to the a priori distribution. 
@@ -116,7 +114,7 @@ using satellite data
 
     \begin{align}
      \int f(x') p(x' | \mathbf{y}) \: dx' \approx \sum_{i = 1}^n f(\mathbf{x}_i) w(\mathbf{y}, x_i)
-    \end{align}%
+    \end{align}
     
 *** The Weighting Function
     

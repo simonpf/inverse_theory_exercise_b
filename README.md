@@ -32,7 +32,7 @@ subdirectory in your exercise folder.
 
 # Background and Summary
 
-In this exercise you will retrieve the *integrated ice column density* 
+In this exercise you will retrieve the *column integrated ice density* 
 or *ice water path* (IWP) from passive microwave observations from the
 *Global Preciptiation Measurement* (GPM) *Microwave Imager*. Eliasson
 et al. <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> argue that measuring the bulk mass of ice in the atmosphere
@@ -48,18 +48,18 @@ able to penetrate through thick clouds.
 
 # Methods
 
-The measurement of cloud properties from passive microwave observations
-is based on the interaction of thermal microwave radiation with 
-clouds through scattering. While possible, modeling scattering in
-a radiative transfer model is computationally too costly to be performed
-*during* the retrieval. In this exercise we are therefore considering
-two methods that use a *precomputed* database <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> consisting of 
-pairs \(\{(\mathbf{y}_i, x_i)\}^n_{i = 1}\) of simulated brightness
-temperatures \(\mathbf{y}_i\) and corresponding IWP values \(x_i\). The 
-ensemble of atmospheric states from which the database is computed,
-was generated from profiles of ice water content obtained from
-the DARDAR<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> dataset. This is to ensure that the ensemble follows a
-physically meaningful a priori distribution.
+The measurement of cloud properties from passive microwave observations is
+based on the interaction of thermal microwave radiation with clouds through
+scattering. While possible, modeling scattering in a radiative transfer model
+is computationally too costly to be performed *during* the retrieval. In this
+exercise we are therefore considering two methods that use a *precomputed*
+database <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> consisting of pairs \(\{(\mathbf{y}_i, x_i)\}^n_{i = 1}\) of
+simulated brightness temperatures \(\mathbf{y}_i\) and corresponding IWP values
+\(x_i\). The ensemble of atmospheric states from which the database is computed,
+was generated from profiles of Cloudsat radar backscatter. This is to ensure
+that the ensemble follows a physically meaningful a priori distribution.
+
+-   only CloudSat radar backscatter
 
 
 ## Bayesian Monte Carlo Integration
@@ -74,14 +74,14 @@ Consider the expected value \(\mathcal{E}_{x | \mathbf{y}}(f(x))\) of a function
 
 \begin{align}
  \int f(x') p(x' | \mathbf{y}) \: dx'
-\end{align}
+\end{align} 
 
 Using Bayes theorem, the integral can be computed as
 
 \begin{align}
  \int f(x') p(x' | \mathbf{y}) \: dx' &=
 \int f(x') \frac{p(\mathbf{y} | x')p(x')}{\int p(\mathbf{y} | x'') \: dx''} \: dx'
-\end{align}
+\end{align} 
 
 To simplify notation, we introduce the weighting function \(w(\mathbf{y}, x)\) :
 
@@ -159,17 +159,17 @@ even allow us to treat the retrieval problem in a Bayesian way, we will not purs
 this statistical interpretation here.
 
 
-### Neural Network 101
+### Neural Networks
 
 Neural networks are a general computing model that compute a vector of
 output activations \(\mathbf{y}\) from an input vector \(\mathbf{x}_\) by
 propagating the input activations through a sequence \(i = 1, \ldots, n\) of layers with
-associated learnable weight matrices \(\mathbf{W}_i\)  and bias vectors \(\mathbf{b}_i\):
+associated learnable weight matrices \(\mathbf{W}_i\)  and bias vectors \(\mathbf{\theta}_i\):
 
 \begin{align}
     \mathbf{x}_0 &= \mathbf{x}\\
     \mathbf{x}_i &= f_{i}
-    \left ( \mathbf{W}_{i} \mathbf{x}_{i - 1}+ \mathbf{b}_i \right ) \\
+    \left ( \mathbf{W}_{i} \mathbf{x}_{i - 1}+ \mathbf{\theta}_i \right ) \\
     \mathbf{y} &= \mathbf{x}_{n}
 \end{align}
 
@@ -201,6 +201,7 @@ Even though neural networks are a pretty hot topic right now, there are many oth
 learning methods that might perform just as good especially on regression tasks and
 moderately sized data sets. Some examples that might be worth considering are:
 
+-   plain and simple linear regression
 -   regression trees and forests
 -   boosted regression trees and boosting in general
 -   support vector machines
@@ -292,15 +293,15 @@ The data required to solve this exercise is provided both as `numpy` arrays and
 MATLAB arrays.
 
 -   `y_database`: \(35000 \times 6\) array containing the simulated brightness temperatures
-    for the retrieval databse.
--   `iwp_database`: \(35000 \times 1\) array containing the IWP values corresponding
-    to the simulated brightness temperatures in `y_database`.
+    in Kelvin for the retrieval databse.
+-   `iwp_database`: \(35000 \times 1\) array containing the IWP values in \(kg / m^2\)
+    corresponding to the simulated brightness temperatures in `y_database`.
 -   `y_validation`: Additional simulated brightness temperatures to test the retrieval.
 -   `iwp_validation`: IWP values corresponding to the brightness temperatures in
     `y_validation`.
--   `gmi_tbs_0, gmi_tbs_1`: Data from two different GMI orbits containing observations
-    of the tropical storm Saola. The observations displayed below show orbit 0, but feel
-    free to use orbit 1 as well.
+-   `gmi_tbs_0, gmi_tbs_1`: Observed brightness temperatures in Kelvin from two different
+    GMI orbits containing observations of the tropical storm Saola. The observations
+     displayed below show orbit 0, but feel free to use orbit 1 as well.
 
 
 ## BMCI
@@ -319,7 +320,7 @@ MATLAB arrays.
     where
     
     -   `y_database`: Matrix containing the simulated observations along its rows.
-    -   `x_database`: Vetor containing the corresponding IWP values (or any other quantity
+    -   `x_database`: Vector containing the corresponding IWP values (or any other quantity
         you may want to retrieve).
     -   `s_o`: Matrix containing the covariance matrix \(\mathbf{S}_o\) describing
         the observation uncertainty.
@@ -368,13 +369,13 @@ MATLAB arrays.
 
     The arrays `gmi_tbs_0` and `gmi_tbs_1` contain the observed calibrated brightness
     temperatures from to GMI orbits that saw the (extra-)tropical storm Saola as it
-    tracked southeast of Japan 2017-10-27. The storm is better visible in `gmi_tbs_0`
+    tracked southeast of Japan 2017-10-27. The storm is best visible in `gmi_tbs_0`
     but the other data is provided here as well in case you want to try your retrieval
     on this orbit as well.
     
     ![img](./doc/plots/saola_overview.png "The tropical storm Saola seen from Modis and GMI (`gmi_tbs_0`).")
     
-    Use your retrieval to retrieve the IWP path from the brightness temperatures. The
+    Use your retrieval functions to retrieve the IWP path from the brightness temperatures. The
     functions `plot_modis_image` (`plot_modis` in MATLAB) and `plot_gmi_swath` are
     provided to display the MODIS RGB and your results on a map. Note that you need
     to pass the orbit index to the plotting function.
@@ -383,11 +384,13 @@ MATLAB arrays.
     \(10\text{th}\) percentile as a lower bound for the ice water path.
 
 
-## Machine Learning Methods
+## Regression Methods
 
 In this part of the exercise you should use your
-favorite machine learning regression method to build an
+favorite (machine learning) regression method to build an
 alternative IWP retrieval and compare it to the BMCI retrieval.
+You are free to choose whichever method you like, even a simple
+polynomial fit might work.
 
 In case you are unsure what to pick, two method that should work relatively
 well more or less right away are *neural networks* or *regression trees*.
@@ -406,10 +409,8 @@ as well.
 
 # Footnotes
 
-<sup><a id="fn.1" href="#fnr.1">1</a></sup> Simulations performed and kindly provided by Bengt Rydberg.
-
-<sup><a id="fn.2" href="#fnr.2">2</a></sup> Eliasson, S., S. A. Buehler, M. Milz, P. Eriksson and V. O. John
+<sup><a id="fn.1" href="#fnr.1">1</a></sup> Eliasson, S., S. A. Buehler, M. Milz, P. Eriksson and V. O. John
 Assessing observed and modelled spatial distributions of ice water path
 using satellite data
 
-<sup><a id="fn.3" href="#fnr.3">3</a></sup> <http://www.icare.univ-lille1.fr/projects/dardar>
+<sup><a id="fn.2" href="#fnr.2">2</a></sup> Simulations performed and kindly provided by Bengt Rydberg.
