@@ -43,7 +43,7 @@ at a much higher frequency than can be achieved with active sensors. Compared
 to LIDAR observations, microwave observations also have the advantage of being
 able to penetrate through thick clouds.
 
-![img](./plots/gpm.png "The Global Precipitation Measurement Microwave Imager onboard the GPM core observatory satellite.")
+![img](./doc/plots/gpm.png "The Global Precipitation Measurement Microwave Imager onboard the GPM core observatory satellite.")
 
 
 # Methods
@@ -357,7 +357,7 @@ MATLAB arrays.
     The CDF for the 14325th (0-based indexing!) database entry should look
     like this:
     
-    ![img](./plots/cdf_example.png "Posterior CDF for entry 14325 in the database.")
+    ![img](./doc/plots/cdf_example.png "Posterior CDF for entry 14325 in the database.")
     
     Given the CDF of the posterior what would be your *best estimate* if you
     had to return a single IWP value as the retrieval? How does this
@@ -371,7 +371,7 @@ MATLAB arrays.
     but the other data is provided here as well in case you want to try your retrieval
     on this orbit as well.
     
-    ![img](./plots/saola_overview.png "The tropical storm Saola seen from Modis and GMI (`gmi_tbs_0`).")
+    ![img](./doc/plots/saola_overview.png "The tropical storm Saola seen from Modis and GMI (`gmi_tbs_0`).")
     
     Use your retrieval functions to retrieve the IWP path from the brightness temperatures. The
     functions `plot_modis_image` (`plot_modis` in MATLAB) and `plot_gmi_swath` are
