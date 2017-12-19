@@ -429,6 +429,7 @@
    - Shallow (SNN) and deep (DNN) neural networks
    - Trained with and without hand crafted high-level features (Low, High)
 
+        #+ATTR_LATEX: :width 0.5\linewidth
        [[./imgs/dnn_low_high.png]] 
 
 * Machine Learning
@@ -454,7 +455,8 @@
 
 * My Current Research
 ** Preliminary Results
+   #+ATTR_LATEX: :width 0.5\linewidth
    [[./imgs/posterior_cdfs.png]]
-
+   
 * References
 \printbibliography

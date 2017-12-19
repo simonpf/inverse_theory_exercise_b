@@ -71,13 +71,7 @@ using satellite data
   was generated from profiles of Cloudsat radar backscatter. This is to ensure
   that the ensemble follows a physically meaningful a priori distribution.
   
-  - only CloudSat radar backscatter
-    
-    
-  
 [fn:2] Simulations performed and kindly provided by Bengt Rydberg.
-
-[fn:3] http://www.icare.univ-lille1.fr/projects/dardar
 
 ** Bayesian Monte Carlo Integration
    
