@@ -12,6 +12,7 @@ ${WGT} ${SRVR}data/python/iwp_database.npy
 ${WGT} ${SRVR}data/python/iwp_validation.npy
 ${WGT} ${SRVR}data/python/y_database.npy
 ${WGT} ${SRVR}data/python/y_validation.npy
+${WGT} ${SRVR}data/python/y_test.npy
 
 cd ..
 mkdir matlab
