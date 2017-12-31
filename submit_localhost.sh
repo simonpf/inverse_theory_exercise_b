@@ -7,10 +7,9 @@ read description
 echo "File to upload:"
 read file
 
-curl -c cookies.txt -b cookies.txt \
-     -F "user=1" \
+curl -F "user=1" \
      -F "name=${name}" \
      -F "description=${description}" \
      -F "data=@${file}" \
-     localhost:8000
+     localhost:8000/board/
 
