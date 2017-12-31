@@ -427,7 +427,7 @@ After this you should be able to access the leader board by following this
 
 ### Submitting Results to the Leaderboard
 
-To submit files to the leaderboard from **inside\*/\*outside** the deparment network, you
+To submit files to the leaderboard from **inside/outside** the deparment network, you
 can use the `submit.sh/submit_localhost.sh` bash script:
 
     chmod +x ./submit.sh

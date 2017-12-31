@@ -378,7 +378,7 @@ using satellite data
 
 *** Submitting Results to the Leaderboard
     
-    To submit files to the leaderboard from *inside*/*outside* the deparment network, you
+    To submit files to the leaderboard from *inside/outside* the deparment network, you
     can use the ~submit.sh/submit_localhost.sh~ bash script:
     #+BEGIN_SRC bash
     chmod +x ./submit.sh
