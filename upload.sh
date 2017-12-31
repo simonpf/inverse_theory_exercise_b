@@ -12,5 +12,5 @@ curl -c cookies.txt -b cookies.txt \
      -F "name=${name}" \
      -F "description=${description}" \
      -F "data=@${file}" \
-     192.16.35.117:8000
+     localhost:8000
 

@@ -296,6 +296,7 @@ MATLAB arrays.
     corresponding to the simulated brightness temperatures in `y_database`.
 -   `y_validation`: Additional simulated brightness temperatures to test the retrieval.
 -   `iwp_validation`: IWP values corresponding to the brightness temperatures in
+-   `y_test`: The test set used for the leader board.
     `y_validation`.
 -   `gmi_tbs_0, gmi_tbs_1`: Observed brightness temperatures in Kelvin from two different
     GMI orbits containing observations of the tropical storm Saola. The observations
@@ -403,6 +404,45 @@ as well.
 
     Plot the MAPE of your machine learning retrieval and compare to the results obtained
     using BMCI.
+
+
+## Submit Your Retrieval
+
+Once you have build your retrieval (using BMCI or any regression method) and run
+it on the brightness temperatures in `y_test`, you can upload your results to the
+course leaderboard. 
+
+
+### Accessing the Leaderboard
+
+The Leaderboard can be accessed from **within the department network** using this
+[link](http://129.16.35.117:8000). Accessing the leaderboard from **outside the department network** requires setting
+up SSH tunnel. This can be done be running the following in a terminal:
+
+    ssh -L 8000:129.16.35.117:8000 your.username@your.computer.rss.chalmers.se
+
+After this you should be able to access the leader board by following this
+[link](http://127.0.0.1:8000) in your browser.
+
+
+### Submitting Results to the Leaderboard
+
+To submit files to the leaderboard from **inside\*/\*outside** the deparment network, you
+can use the `submit.sh/submit_localhost.sh` bash script:
+
+    chmod +x ./submit.sh
+    ./submit.sh
+    # or
+    chmod +x ./submit_localhost.sh
+    ./submit_localhost.sh
+
+Note that the `submit_localhost.sh` script requires an ssh tunnel set up as
+described in the previous section.
+
+The script will query your name, a brief (but meaningful) description and
+the path of the file to upload. Both, `.npy` and `.mat` files are supported.
+If you are uploading a `.mat` file, make sure that the file contains only a
+single array otherwise the upload might fail.
 
 
 # Footnotes
