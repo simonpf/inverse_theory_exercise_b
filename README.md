@@ -112,7 +112,7 @@ by
 \end{align}
 
 for some normalization factor \(C\). The normalization factor is found to be 
-\(C = \sum_{n = 1}^n w(\mathbf{y}, x_i)\) to ensure that
+\(C = \sum_{i = 1}^n w(\mathbf{y}, x_i)\) to ensure that
 \(\mathcal{E}_{x|\mathbf{y}}\{1\} = 1\).
 
 
