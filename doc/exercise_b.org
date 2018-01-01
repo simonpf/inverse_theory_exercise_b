@@ -369,7 +369,7 @@ using satellite data
     
     The Leaderboard can be accessed from *within the department network* using this
     [[http://129.16.35.117:8000][link]]. Accessing the leaderboard from *outside the department network* requires setting
-    up SSH tunnel. This can be done be running the following in a terminal:
+    up an SSH tunnel. This can be done be running the following in a terminal:
     #+BEGIN_SRC bash
     ssh -L 8000:129.16.35.117:8000 your.username@your.computer.rss.chalmers.se
     #+END_SRC
@@ -383,7 +383,11 @@ using satellite data
     #+BEGIN_SRC bash
     chmod +x ./submit.sh
     ./submit.sh
-    # or
+    #+END_SRC
+
+    or
+
+    #+BEGIN_SRC bash
     chmod +x ./submit_localhost.sh
     ./submit_localhost.sh
     #+END_SRC
